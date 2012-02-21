@@ -1,0 +1,79 @@
+==========================================================
+NiuRouting - Niu Routing Functionalities on SQLite
+==========================================================
+
+INTRODUCTION
+----------------------------------------------------------
+
+Thanks to <Stephen Woodbridge> for TRSP 
+
+INTRODUCTION
+----------------------------------------------------------
+
+This library contains following features:
+
+* TRSP - Turn restriction shortest path
+
+REQUIREMENT
+----------------------------------------------------------
+
+SQLite3
+
+
+INSTALLATION
+----------------------------------------------------------
+
+cd niurouting/contrib/trsp
+
+make
+
+cd niurouting
+
+make
+
+its generate a <niurouting.sqlext>
+
+
+USAGE
+----------------------------------------------------------
+
+We need to have 2 tables <network, restrictions>
+
+CREATE TABLE "network" (
+	 "id" serial NOT NULL,
+	 "segment" integer NOT NULL,
+	 "source" integer NOT NULL,
+	 "target" integer NOT NULL,
+	 "cost" real NOT NULL,
+	 "reverse_cost" real NOT NULL,
+	PRIMARY KEY("id")
+);
+
+CREATE TABLE "restrictions" (
+	 "rid" INTEGER NOT NULL,
+	 "target_id" INTEGER NOT NULL,
+	 "to_cost" real NOT NULL,
+	 "via_path" text NOT NULL,
+	PRIMARY KEY("rid")
+);
+
+-- On SQLite shell
+
+.load bin/niurouting.sqlext
+
+create virtual table routing  using NiuRouting(network, restrictions); 
+
+now you can performance a sql to calculate a route:
+
+select * from routing where source = 9151 and target = 9108 and directed = 0 and has_reverse_cost = 1;
+
+you can see more documentation: 
+	
+	http://www.pgrouting.org/docs/1.x/dijkstra.html
+	
+	http://www.pgrouting.org/docs/foss4g2008/ch09.html
+
+LICENCE
+----------------------------------------------------------
+
+http://www.opensource.org/licenses/mit-license.php
